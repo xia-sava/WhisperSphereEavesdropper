@@ -11,7 +11,7 @@ class OptionsUI {
     private disconnectButton: HTMLButtonElement;
     private connectionStatus: HTMLParagraphElement;
     private connected: boolean;
-    private debugAwsEndpoint: HTMLInputElement;
+    private awsEndpoint: HTMLInputElement;
 
     private constructor(
         private config: Config,
@@ -25,7 +25,7 @@ class OptionsUI {
         this.disconnectButton = document.getElementById("disconnectButton") as HTMLButtonElement;
         this.connectionStatus = document.getElementById("connectionStatus") as HTMLParagraphElement;
         this.connected = false;
-        this.debugAwsEndpoint = document.getElementById("debugAwsEndpoint") as HTMLInputElement;
+        this.awsEndpoint = document.getElementById("awsEndpoint") as HTMLInputElement;
     }
 
     static async run() {
@@ -43,7 +43,7 @@ class OptionsUI {
         this.awsSecretAccessKey.value = this.config.awsSecretAccessKey;
         this.awsRegion.value = this.config.awsRegion;
         this.connected = this.config.connected;
-        this.debugAwsEndpoint.value = this.config.debugAwsEndpoint;
+        this.awsEndpoint.value = this.config.awsEndpoint;
 
         this.enabled.disabled = true;
         this.connectButton.disabled = true;
@@ -73,8 +73,8 @@ class OptionsUI {
         this.awsRegion.addEventListener("change", async () => {
             await this.setConfig("awsRegion", this.awsRegion.value);
         });
-        this.debugAwsEndpoint.addEventListener("change", async () => {
-            await this.setConfig("debugAwsEndpoint", this.debugAwsEndpoint.value);
+        this.awsEndpoint.addEventListener("change", async () => {
+            await this.setConfig("awsEndpoint", this.awsEndpoint.value);
         });
         this.connectButton.addEventListener("click", async () => {
             await this.connect();
@@ -95,8 +95,8 @@ class OptionsUI {
         const awsAccessKeyId = this.awsAccessKeyId.value;
         const awsSecretAccessKey = this.awsSecretAccessKey.value;
         const awsRegion = this.awsRegion.value;
-        const debugAwsEndpoint = this.debugAwsEndpoint.value;
-        return new StorageClient(awsAccessKeyId, awsSecretAccessKey, awsRegion, debugAwsEndpoint);
+        const awsEndpoint = this.awsEndpoint.value;
+        return new StorageClient(awsAccessKeyId, awsSecretAccessKey, awsRegion, awsEndpoint);
     }
 
     // AWS に接続します

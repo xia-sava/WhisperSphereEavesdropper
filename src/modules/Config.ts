@@ -4,8 +4,8 @@ export class Config {
     public awsAccessKeyId: string = "";
     public awsSecretAccessKey: string = "";
     public awsRegion: string = "ap-northeast-1";
+    public awsEndpoint: string = "";
     public connected: boolean = false;
-    public debugAwsEndpoint: string = "";
 
     private constructor() {
     }
@@ -23,14 +23,14 @@ export class Config {
 
     async load() {
         const keyDefaults: {[p: string]: any} = Object.assign({}, this)
-        const items = await chrome.storage.sync.get(keyDefaults);
+        const items = await chrome.storage.sync.get(keyDefaults) as Required<Config>;
         this.enabled = items.enabled;
         this.ttl_days = items.ttl_days;
         this.awsAccessKeyId = items.awsAccessKeyId;
         this.awsSecretAccessKey = items.awsSecretAccessKey;
         this.awsRegion = items.awsRegion;
+        this.awsEndpoint = items.awsEndpoint;
         this.connected = items.connected;
-        this.debugAwsEndpoint = items.debugAwsEndpoint;
     }
 
     async save() {

@@ -10,7 +10,7 @@ class BackgroundScript {
     private constructor(
         private config: Config,
     ) {
-        this.storage = new StorageClient(config.awsAccessKeyId, config.awsSecretAccessKey, config.awsRegion, config.debugAwsEndpoint);
+        this.storage = new StorageClient(config.awsAccessKeyId, config.awsSecretAccessKey, config.awsRegion, config.awsEndpoint);
         console.log('Background script loaded.');
     }
 

@@ -17,7 +17,7 @@ const TABLE_NAME = "WhisperSphere_Tweets";
 export class StorageClient {
     private dynamoDb: DynamoDB;
 
-    constructor(awsAccessKeyId: string, awsSecretAccessKey: string, awsRegion: string, debugAwsEndpoint: string | null = null) {
+    constructor(awsAccessKeyId: string, awsSecretAccessKey: string, awsRegion: string, awsEndpoint: string | null = null) {
         this.dynamoDb = new DynamoDB({
             ...{
                 region: awsRegion,
@@ -26,7 +26,7 @@ export class StorageClient {
                     secretAccessKey: awsSecretAccessKey,
                 },
             },
-            ...(debugAwsEndpoint ? {endpoint: debugAwsEndpoint} : {})
+            ...(awsEndpoint ? {endpoint: awsEndpoint} : {})
         });
     }
 
