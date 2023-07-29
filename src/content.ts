@@ -1,5 +1,5 @@
 import {Config} from "./modules/Config";
-import {Tweet} from "./modules/Tweet";
+import {Tweet} from "./modules/models";
 
 import MessageSender = chrome.runtime.MessageSender;
 
@@ -50,13 +50,13 @@ class ContentScript {
     async waitForNewTweets(tweetColumn: Element) {
         console.log('Waiting for new tweets...');
         new MutationObserver(
-            async (mutations, observer) => {
+            async (mutations, _) => {
                 if (this.config.enabled) {
                     for (const mutation of mutations) {
                         let seq = 0
                         for (const addedNode of Array.from(mutation.addedNodes).reverse()) {
                             if (addedNode instanceof HTMLElement && addedNode.tagName === 'ARTICLE') {
-                                await this.handleNewTweet(addedNode, ++seq);
+                                seq = await this.handleNewTweet(addedNode, ++seq);
                             }
                         }
                     }
@@ -70,27 +70,29 @@ class ContentScript {
     async handleNewTweet(tweetArticle: HTMLElement, seq: number) {
         try {
             const timestamp = Date.now();
-            const userId = (tweetArticle.getAttribute('data-account-key') as string).replace("twitter:", "");
-            const tweetId = tweetArticle.getAttribute('data-tweet-id') as string;
-            const tweetTime = parseInt(tweetArticle.querySelector('time')?.getAttribute('data-time') as string) / 1000;
-            const tweetText = tweetArticle.querySelector('.tweet-text')?.textContent as string
+            const userId = (tweetArticle.getAttribute('data-account-key') ?? "").replace("twitter:", "");
+            const tweetId = tweetArticle.getAttribute('data-tweet-id') ?? "";
+            const tweetTime = parseInt(tweetArticle.querySelector('time')?.getAttribute('data-time') ?? "0") / 1000;
+            const tweetText = tweetArticle.querySelector('.tweet-text')?.textContent ?? ""
 
-            const tweet = new Tweet(
-                userId,
-                `${timestamp * 1000 + seq}`,
-                Math.floor(timestamp / 1000) + this.config.ttl_days * 24 * 60 * 60,
-                tweetTime,
-                tweetId,
-                tweetText,
-            )
-            const result = await chrome.runtime.sendMessage({
-                type: 'newTweet',
-                tweet: tweet,
-            });
-            console.log('message sent:', tweet, result);
+            if (tweetId) {
+                const tweet = new Tweet(
+                    timestamp * 1000 + seq,
+                    tweetId,
+                    tweetTime,
+                    userId,
+                    tweetText,
+                )
+                const result = await chrome.runtime.sendMessage({
+                    type: 'newTweet',
+                    tweet: tweet,
+                });
+                console.log('message sent:', tweet, result);
+            }
         } catch (e) {
             console.error('Error sending message:', e);
         }
+        return seq
     }
 }
 

@@ -1,4 +1,4 @@
-import {Tweet} from "./Tweet";
+import {WhisperSphereObject} from "./models";
 
 import {
     CreateTableCommand,
@@ -11,7 +11,7 @@ import {
 import {marshall} from "@aws-sdk/util-dynamodb";
 
 
-const TABLE_NAME = "WhisperSphere_Tweets";
+const TABLE_NAME = "WhisperSphere";
 
 
 export class StorageClient {
@@ -53,21 +53,21 @@ export class StorageClient {
     }
 
     async createTables() {
-        const createTweetsTableCommand = new CreateTableCommand({
+        const createTableCommand = new CreateTableCommand({
             TableName: TABLE_NAME,
             AttributeDefinitions: [
                 {
-                    AttributeName: "userId",
+                    AttributeName: "type",
                     AttributeType: "S",
                 },
                 {
                     AttributeName: "timestamp",
-                    AttributeType: "S",
+                    AttributeType: "N",
                 },
             ],
             KeySchema: [
                 {
-                    AttributeName: "userId",
+                    AttributeName: "type",
                     KeyType: "HASH",
                 },
                 {
@@ -80,32 +80,32 @@ export class StorageClient {
                 WriteCapacityUnits: 5,
             },
         });
-        console.log("create table", createTweetsTableCommand);
-        await this.dynamoDb.send(createTweetsTableCommand);
+        console.log("create table", createTableCommand);
+        await this.dynamoDb.send(createTableCommand);
         while (! await this.tableExists()) {
             await new Promise(res => setTimeout(res, 3000));
         }
 
-        const updateTweetsTableCommand = new UpdateTimeToLiveCommand({
-            TableName: "WebSphere_Tweets",
+        const updateTableCommand = new UpdateTimeToLiveCommand({
+            TableName: TABLE_NAME,
             TimeToLiveSpecification: {
                 AttributeName: "ttl",
                 Enabled: true,
             },
         });
-        await this.dynamoDb.send(updateTweetsTableCommand)
+        await this.dynamoDb.send(updateTableCommand)
     }
 
-    async saveTweet(tweet: Tweet) {
+    async save(obj: WhisperSphereObject) {
         try {
             const putCommand = new PutItemCommand({
                 TableName: TABLE_NAME,
-                Item: marshall(tweet),
+                Item: marshall(obj.marshal()),
             });
             await this.dynamoDb.send(putCommand);
-            console.log("Tweet saved:", tweet);
+            console.log(`${obj.type} saved:`, obj);
         } catch (error) {
-            console.error("Error saving tweet:", error);
+            console.error(`Error saving ${obj.type}:`, error);
         }
     }
 }

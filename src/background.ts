@@ -1,6 +1,6 @@
 import {Config} from "./modules/Config";
 import {StorageClient} from "./modules/StorageClient";
-import {Tweet} from "./modules/Tweet";
+import {Tweet} from "./modules/models";
 
 import MessageSender = chrome.runtime.MessageSender;
 
@@ -34,8 +34,8 @@ class BackgroundScript {
     private handleMessage(message: any, sender: MessageSender, sendResponse: (response?: any) => void) {
         try {
             if (message.type === 'newTweet') {
-                const tweet: Tweet = message.tweet;
-                this.storage.saveTweet(tweet).then();
+                const tweet = Tweet.from(message.tweet).withTtlDays(this.config.ttl_days);
+                this.storage.save(tweet).then();
                 sendResponse({status: 'saved'});
             }
         } catch (e) {
