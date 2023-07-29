@@ -1,0 +1,31 @@
+{
+  "name": "whispersphereeavesdropper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.ts",
+    "build & zip": "webpack --config webpack.config.ts; zip whispersphereeavesdropper.zip manifest.json dist/*",
+    "watch": "webpack --config webpack.config.ts --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chrome": "^0.0.234",
+    "@types/firefox-webext-browser": "^111.0.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2",
+    "webpack-dev-server": "^4.13.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.325.0",
+    "@aws-sdk/types": "^3.310.0",
+    "@aws-sdk/util-dynamodb": "^3.326.0"
+  }
+}

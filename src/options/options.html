@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WhisperSphere Options</title>
+</head>
+<body>
+<h1>WhisperSphere Options</h1>
+<form id="optionsForm">
+    <section>
+        <h2>WhisperSphere</h2>
+        <div>
+            <label>
+                <input type="checkbox" id="enabled"/>
+                Enable WhisperSphere
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="number" id="ttl_days"/>
+                Storage TTL (days)
+            </label>
+        </div>
+    </section>
+    <section>
+        <h2>AWS DynamoDB Settings</h2>
+        <div>
+            <label>
+                AWS Access Key ID:
+                <input type="text" id="awsAccessKeyId"/>
+            </label>
+        </div>
+        <div>
+            <label>
+                AWS Secret Access Key:
+                <input type="password" id="awsSecretAccessKey"/>
+            </label>
+        </div>
+        <div>
+            <label>
+                AWS Region:
+                <input type="text" id="awsRegion"/>
+            </label>
+        </div>
+        <div>
+            <label>
+                Connection:
+                <button id="connectButton" type="button" disabled>Connect</button>
+                /
+                <button id="disconnectButton" type="button" disabled>Disconnect</button>
+            </label>
+        </div>
+        <div>
+            <p id="connectionStatus"></p>
+        </div>
+    </section>
+    <section>
+        <h2>Debug Settings</h2>
+        <div>
+            <label>
+                AWS Endpoint:
+                <input type="text" id="debugAwsEndpoint"/>
+            </label>
+        </div>
+    </section>
+</form>
+<script src="options.js"></script>
+</body>
+</html>

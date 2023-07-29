@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "WhisperSphereEavesdropper",
+  "version": "1.0",
+  "description": "",
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "host_permissions": [
+    "http://localhost:43116/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "512": "images/cage512.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://tweetdeck.twitter.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "512": "images/cage512.png"
+  }
+}
