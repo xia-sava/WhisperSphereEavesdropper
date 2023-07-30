@@ -24,7 +24,7 @@
     "webpack-dev-server": "^4.13.3"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.325.0",
+    "@aws-sdk/client-dynamodb": "^3.379.1",
     "@aws-sdk/types": "^3.310.0",
     "@aws-sdk/util-dynamodb": "^3.326.0"
   }
